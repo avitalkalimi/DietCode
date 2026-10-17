@@ -1,0 +1,249 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>תפריט 1,500 שלי</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&family=Press+Start+2P&display=swap">
+<style>
+/* Layout: one-column game "level" — sticky score bar, six meal blocks stacked like platforms, bottom-sheet picker. Single deliberate sky-world look. */
+:root{
+  --sky:#6FA8FF; --sky-deep:#4A86E8; --cloud:#FFFFFF; --brick:#C84C0C; --brick-dark:#7A2E08;
+  --gold:#FBD000; --gold-dark:#B88A00; --grass:#3FA34D; --ink:#2A1606; --paper:#FFF8E7; --muted:#7B6A55;
+  --chip:#FFE9A8; --warn:#FFD9C7;
+  --display:"Rubik",system-ui,sans-serif; --body:"Rubik",system-ui,-apple-system,"Segoe UI",Arial,sans-serif; --pixel:"Press Start 2P",ui-monospace,monospace;
+  color-scheme:light;
+}
+html{background:var(--sky)}
+body{background:linear-gradient(var(--sky) 0, var(--sky) 60%, #8DBBFF 100%);color:var(--ink);font-family:var(--body);direction:rtl;min-height:100%;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 32px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--brick)}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));
+  background:var(--brick);border-bottom:4px solid var(--brick-dark);
+  background-image:linear-gradient(var(--brick-dark) 2px,transparent 2px),linear-gradient(90deg,var(--brick-dark) 2px,transparent 2px);
+  background-size:28px 14px;}
+.top-in{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px max(16px,env(safe-area-inset-left,0px));max-width:640px;margin:0 auto}
+.top h1{margin:0;font-family:var(--display);font-weight:800;font-size:1.15rem;color:#fff;text-shadow:2px 2px 0 var(--brick-dark)}
+.score{display:flex;align-items:center;gap:8px;background:var(--ink);color:#fff;border-radius:6px;padding:7px 10px;font-family:var(--pixel);font-size:.7rem;direction:ltr;font-variant-numeric:tabular-nums}
+.coin{width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#FFF2A0 0 20%,var(--gold) 21% 70%,var(--gold-dark) 71%);border:2px solid var(--ink);flex:none}
+
+main{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:18px;padding-top:16px}
+.intro{background:var(--paper);border:3px solid var(--ink);border-radius:10px;padding:12px 14px;box-shadow:4px 4px 0 rgba(42,22,6,.35)}
+.intro p{margin:0;line-height:1.5;font-size:.95rem}
+.bar{margin-top:10px;height:14px;border:3px solid var(--ink);border-radius:8px;background:#fff;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:repeating-linear-gradient(90deg,var(--gold) 0 10px,#FFE35C 10px 20px);transition:width .3s}
+.intro small{display:block;margin-top:6px;color:var(--muted);font-size:.8rem}
+
+.meal{background:var(--paper);border:3px solid var(--ink);border-radius:10px;overflow:hidden;box-shadow:4px 4px 0 rgba(42,22,6,.35)}
+.meal-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;background:var(--gold);border-bottom:3px solid var(--ink)}
+.meal-h h2{margin:0;font-family:var(--display);font-weight:800;font-size:1.1rem;text-wrap:balance}
+.meal-h .when{font-size:.78rem;color:var(--ink);opacity:.75;display:block;font-weight:500}
+.meal-t{display:flex;align-items:center;gap:10px}
+.num{flex:none;width:32px;height:32px;display:grid;place-items:center;background:var(--brick);color:#fff;border:3px solid var(--ink);border-radius:6px;font-family:var(--pixel);font-size:.75rem;text-shadow:1px 1px 0 var(--brick-dark);box-shadow:inset -3px -3px 0 var(--brick-dark)}
+.badge{font-family:var(--pixel);font-size:.6rem;background:var(--ink);color:#fff;border-radius:5px;padding:6px 8px;direction:ltr;white-space:nowrap}
+.meal.done .badge{background:var(--grass)}
+.parts{display:flex;flex-direction:column}
+.part{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;padding:12px 14px;border-top:2px dashed #E3D3B5;background:transparent;border-inline:0;border-bottom:0;text-align:right;cursor:pointer;width:100%;min-height:60px}
+.parts .part:first-child{border-top:0}
+.part:active{background:#FFF0C9}
+.ico{width:34px;height:34px;border-radius:8px;border:2px solid var(--ink);display:grid;place-items:center;font-weight:800;font-size:.95rem;background:var(--chip)}
+.part .lbl{min-width:0}
+.part .name{display:block;font-weight:700;font-size:.95rem}
+.part .val{display:block;font-size:.88rem;color:var(--muted);margin-top:2px;line-height:1.35;overflow-wrap:anywhere}
+.part.filled .val{color:var(--ink)}
+.part.filled .ico{background:var(--gold)}
+.part .go{font-size:.78rem;font-weight:700;border:2px solid var(--ink);border-radius:999px;padding:4px 10px;background:#fff;white-space:nowrap}
+.part.filled .go{background:var(--grass);color:#fff}
+
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{flex:1 1 140px;border:3px solid var(--ink);border-radius:10px;padding:12px;font-weight:700;background:#fff;cursor:pointer;box-shadow:3px 3px 0 rgba(42,22,6,.35)}
+.btn.primary{background:var(--grass);color:#fff}
+.btn.danger{background:var(--brick);color:#fff}
+.confirm{background:var(--paper);border:3px solid var(--ink);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.confirm p{margin:0;font-weight:500}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;font-weight:500;z-index:30}
+.ground{height:44px;margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-top:10px;background:var(--brick);
+  background-image:linear-gradient(var(--brick-dark) 3px,transparent 3px),linear-gradient(90deg,var(--brick-dark) 3px,transparent 3px);background-size:32px 22px;border-top:6px solid var(--grass)}
+footer{max-width:640px;margin:14px auto 0;font-size:.8rem;color:#123;line-height:1.5}
+footer a{color:#0B2A66;font-weight:700}
+
+/* bottom sheet */
+.scrim{position:fixed;inset:0;background:rgba(20,10,0,.45);z-index:20}
+.sheet{position:fixed;inset:auto 0 0 0;z-index:21;background:var(--paper);border-top:4px solid var(--ink);border-radius:16px 16px 0 0;max-height:88%;display:flex;flex-direction:column;
+  padding-bottom:env(safe-area-inset-bottom,0px)}
+.sheet-h{padding:12px max(16px,env(safe-area-inset-left,0px)) 10px;border-bottom:3px solid var(--ink);background:var(--gold);border-radius:12px 12px 0 0;display:flex;flex-direction:column;gap:8px}
+.sheet-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sheet-h h3{margin:0;font-family:var(--display);font-size:1.05rem;font-weight:800}
+.sheet-h .note{font-size:.82rem;line-height:1.4}
+.x{border:2px solid var(--ink);background:#fff;border-radius:8px;padding:6px 10px;font-weight:700;cursor:pointer}
+#q{width:100%;border:3px solid var(--ink);border-radius:10px;padding:10px 12px;font:inherit;font-size:1rem;background:#fff;color:var(--ink)}
+.list{overflow-y:auto;padding:6px max(16px,env(safe-area-inset-left,0px)) 16px;-webkit-overflow-scrolling:touch}
+.grp{margin:14px 0 6px;font-weight:800;font-size:.85rem;color:var(--brick-dark);letter-spacing:.02em}
+.grp small{font-weight:500;color:var(--muted)}
+.opt{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;text-align:right;background:#fff;border:2px solid #E3D3B5;border-radius:10px;padding:11px 12px;margin-top:6px;cursor:pointer;line-height:1.35}
+.opt.sel{border-color:var(--ink);background:#FFF1B8}
+.opt span{min-width:0;overflow-wrap:anywhere}
+.tag{flex:none;font-size:.7rem;font-weight:700;background:var(--warn);border:1.5px solid var(--brick);color:var(--brick-dark);border-radius:999px;padding:2px 8px;white-space:nowrap}
+.empty{padding:20px 0;color:var(--muted);text-align:center}
+.clear{margin-top:12px;width:100%;border:2px dashed var(--brick);background:transparent;color:var(--brick-dark);border-radius:10px;padding:10px;font-weight:700;cursor:pointer}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+
+<header class="top"><div class="top-in">
+  <h1>התפריט שלי</h1>
+  <div class="score" aria-live="polite"><span class="coin" aria-hidden="true"></span><span id="score">0/19</span></div>
+</div></header>
+
+<main>
+  <section class="intro">
+    <p>בכל ארוחה, הקש על רכיב ובחר מנה אחת מהרשימה. כל מנה שתבחר שווה מטבע.</p>
+    <div class="bar" aria-hidden="true"><i id="bar"></i></div>
+    <small id="status">אין עדיין בחירות להיום</small>
+  </section>
+  <div id="meals"></div>
+  <div class="actions" id="actions">
+    <button class="btn primary" id="copy" type="button">העתקת התפריט</button>
+    <button class="btn danger" id="reset" type="button">יום חדש</button>
+  </div>
+  <div class="confirm" id="confirm" hidden>
+    <p>למחוק את כל הבחירות של היום?</p>
+    <div class="actions">
+      <button class="btn danger" id="yes" type="button">כן, למחוק</button>
+      <button class="btn" id="no" type="button">ביטול</button>
+    </div>
+  </div>
+</main>
+<div class="ground" aria-hidden="true"></div>
+<footer>מבוסס על <a href="https://heli-group.co.il/menu/%D7%AA%D7%A4%D7%A8%D7%99%D7%98-1500-%D7%A7%D7%9C%D7%95%D7%A8%D7%99%D7%95%D7%AA/" target="_blank" rel="noopener">תפריט 1,500 קלוריות של חלי ממן</a>. הבחירות נשמרות בדפדפן שלך בלבד.</footer>
+
+<div class="scrim" id="scrim" hidden></div>
+<section class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="sheet-h">
+    <div class="sheet-row"><h3 id="sheetTitle"></h3><button class="x" id="close" type="button">סגירה</button></div>
+    <div class="note" id="sheetNote"></div>
+    <input id="q" type="search" placeholder="חיפוש, למשל: גבינה, תפוח, טונה" autocomplete="off">
+  </div>
+  <div class="list" id="list"></div>
+</section>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const LISTS={
+carb:{name:"פחמימה",ico:"פ",note:"מנה אחת מכל קבוצה.",groups:[
+ {g:"לחמים, קרקרים ופחמימות שונות",items:["1 פיתה קלה (עד 80 קלוריות ליחידה)","1 פרוסת לחם רגיל","2 פרוסות לחם קל","1/3 פיתה רגילה","1 לחמנייה קלה (עד 80 קלוריות)","30 גרם לחמנייה מכל סוג","1/2 מצה","1 מצה קלה","3 פתית","3 קרקרים דגנית בייגל בייגל","2 פירכיות שיבולת שועל/אורז","2 לחמית/קרקר זהב","10 פירכיות ביס","6 טוסטעים מלבניים","1/2 טורטיה גדולה","1 עלה סיגר גדול או 2 קטנים","5 דפי אורז","1 כף שקדי מרק","2 כפות קמח שטוחות","2 כפות סולת שטוחות","2 כפות פירורי לחם לא מטוגנים/שיבולת שועל/קורנפלור","חצי דלורית קטנה","1/2 כוס אפונה ירוקה","1 סלק בינוני","1 כוס נבטוטים","1.5 כוס תרמילי אדממה","1/3 דלעת ערמונים / דלעת ספגטי (קטנה)","8 תחתיות ארטישוק","100 גרם ארטישוק ירושלמי (2 קטנים או אחד גדול)"]},
+ {g:"מתוקים",n:"אחד בלבד, עד פעם ביום",items:["2 פתי בר","2 עוגיות ללא סוכר","1 חטיף אנרגיה (עד 100 קלוריות)","3/4 כוס קורנפלקס/פייבר וואן/קראנצים ללא סוכר","2 כפות גרנולה ללא סוכר"]},
+ {g:"פחמימות מבושלות",items:["1/2 כוס לאחר בישול: אורז, בורגול, כוסמת, קוסקוס, חיטה, גריסים, פתיתים, פסטה, אפונה ירוקה, קינואה, תירס","1/2 כוס לאחר בישול קטניות: חומוס, שעועית, פול, עדשים, אפונה","1 תפוח אדמה בינוני","1/2 בטטה מתוקה קטנה","1 קלח תירס קטן","3/4 כוס תירס קל","5 מקלות צ'יפס רגיל","3 יחידות עלי גפן","7 ערמונים","1/2 כוס פירה"]},
+ {g:"חטיפים",n:"עד שלוש פעמים בשבוע",items:["1 שקית במבה קטנה (15 גרם)","שקית פופקורן (עד 100 קלוריות לשקית)","2 כוסות פופקורן מוכן ללא שמן","1 כוס פופקורן מוכן עם שמן","10 יח' בייגלה קטן","1 שקית צ'יפס קידס"]}]},
+cheese:{name:"חלבון גבינה",ico:"ג",note:"מנה אחת. קבוצת התחליפים: עד פעמיים בשבוע.",groups:[
+ {g:"גבינות וממרחים",items:["2 כפות גבינה 3%-5% מכל סוג (סימפוניה, קוטג', לבנה וכדומה)","2 משולשי מון בלאן","60 גרם גבינה קשה עד 5% (צפתית או בולגרית)","2 כפות ממרח טופו (עד 5% שומן)","1 אצבע מוצרלה","1 פרוסת גבינה צהובה 9%","2 פרוסות גבינה צהובה 9% דק-דק","1 פרוסת גבינה צהובה 22% (פעם ביום)"]},
+ {g:"מעדנים",items:["1 גביע מעדן/יוגורט 0% מכל סוג (עד 80 קלוריות)","1 גביע יוגורט ללא תוספות עד 1.5% (עד 80 קלוריות)","משקה בוקר 0% (עד 80 קלוריות)","כוס שוקו 0% (עד 80 קלוריות)","יחידת אקטימל 3%","3/4 כוס רוויון"]},
+ {g:"גלידות",items:["כוס גלידה דיאט 2%-5% שומן ללא סוכר","1 שלגון חלבי (עד 80 קלוריות ליחידה, עד פעם ביום)"]},
+ {g:"שונות",items:["1 כוס חלב מכל סוג 1%","1 כוס חלב סויה ללא תוספות וללא סוכר","1/2 כוס פולי סויה/קטניות","60 גרם טופו","1 ביצה","חצי קופסת טונה במים","1.5 כף טונה בשמן","50 גרם ממרח טונה/סלמון","3 כדורי פלאפל אפויים","6 כדורי פלאפל חלי ממן אפויים","80 גרם דג מבושל","25 גרם שבבי סויה יבשים (לפני בישול)","50 גרם/חצי קופסת סרדינים (ללא שמן)"]},
+ {g:"תחליפי חלבון",n:"עד פעמיים בשבוע",w:true,items:["1/2 כוס חלב 3%","100 מ\"ל שמנת אלפרו 5%","2 פרוסות גבינה טוסטי (אדם)","1 כף גבינה סימפוניה תשיעית","2 פרוסות גבינה צהובה טוסטי טופו","6 כפות (60 מ\"ל) שמנת לבישול 10%","5 כפות (50 מ\"ל) שמנת לבישול 15%","50 גרם סלמון מעושן","1 פרוסת דג מלוח","1 כף שטוחה ממרח חומוס","4 פרוסות פסטרמה דלת שומן","1 מעדן סויה אלפרו (100 קלוריות)","1 גביע גיל 3%","1 כוס חלב אורז","1 רול סושי 6/8 יחידות (לא מטוגן, כתחליף לכל ארוחת הערב)","1 כוס חלב שקדים ללא תוספות וללא סוכר","1.5 בורקס פילו (כתחליף לכל ארוחת הערב)","מיני טילון/מיני סנקור/סולרו (עד 80 קלוריות ליחידה)"]}]},
+fat:{name:"שומן",ico:"ש",note:"עד 60 קלוריות למנה.",groups:[
+ {g:"שמן, זיתים, זרעים ושמנת",items:["1 כפית שמן מכל סוג","6 זיתים קטנים","2 זיתים גדולים","1 כף זרעי פשתן/גרעיני צ'יה/שומשום/צנובר","1 כף קוקוס טחון או 10 גר' קוקוס יבש","כף נבט חיטה","2 כפות מי קוקוס","1 כף קרם קוקוס","2 כפות שמנת חמוצה 15%","4 כפות שמנת חמוצה 9%","1 כפית חמאה (רצוי לא כל יום)","5 כפות (50 מ\"ל) שמנת אלפרו"]},
+ {g:"פיצוחים",n:"רצוי לא קלויים",items:["7 שקדים","3 פקאנים/אגוזי מלך","10 בוטנים","1 כף גרעיני חמניה","10 יחידות פיסטוק","4 יחידות קשיו","3 יחידות מקדמיה","5 יחידות אגוזי לוז","2 יחידות אגוזי ברזיל","7 יחידות בננה צ'יפס (עד פעמיים בשבוע)"]},
+ {g:"רטבים",items:["3 כפות רוטב לייט","1.5 כף רוטב רגיל"]},
+ {g:"ממרחים",items:["1 כף סלט חצילים במיונז/בטחינה","1 כפית ממרח בוטנים","1 כפית טחינה גולמית","1 כף טחינה מוכנה","1 כפית מיונז","1 כף \"כמו מיונז\"","1 כף ממרח שומשום (עד פעמיים בשבוע)","1 כף אבוקדו","1 כפית חומוס מוכן","1 כפית הריסה/פסטו/עגבניות מיובשות/ממרח זיתים","1 כף שטוחה איקרה","10 גרם חלווה (עד פעמיים בשבוע)"]}]},
+fruit:{name:"פרי",ico:"פר",note:"3 מנות פרי ביום: בשתי ארוחות הביניים ובארוחת הלילה.",groups:[
+ {g:"פירות",items:["אבטיח – 1 כוס","אגס – 1 בינוני","אוכמניות – 1 כוס","אנונה – 1 קטנה","אננס טבעי – 2 פרוסות","אננס יבש – 2 יח'","אננס מיובש מסוכר – 1/2 יח'","אננס מקופסת שימורים – 1 יח'","אפרסמון – 1 קטן","אפרסק – 1 בינוני","אשכולית – 1/2 קטנה","בננה – 1 קטנה","גוג'י ברי – 2 כפות","גויאבה – 1 בינונית","דובדבנים – 1 כוס","חבוש – 1 קטן","חמוציות – 2 כפות ללא תוספת סוכר","חרוב – 2 יחידות","ליפתן משומר – 1/3 כוס בלי מיץ","ליצ'י טרי – 7 יח'","ליצ'י משומר – 4 יח'","מיץ פרי הדר טבעי – 1/2 כוס","מלון – 1 כוס","מנגו – 1/2 יחידה","משמש מיובש – 3 יחידות","משמש – 3 קטנים","נקטרינה – 1 יחידה בינונית","סברס – 2 יחידות","ענבים – 1 כוס","פאפיה טריה – 1 כוס","פאפיה יבשה – 1/4","פומלה – 1/3","פטל – 1 כוס","פיג'ויה – 2 יחידות","פיטאיה – 1/2 יח' בינונית","פיטנגו – 1 כוס","פירות יער – 1 כוס","פסיפלורה – 4 יחידות","צימוקים – 1 כף","קיווי – 2 בינוניים","קלמנטינה – 2 בינוניות","קרמבולה – 2 יח'","רימון – 1/2 יחידה","רסק תפוחים (לא ממותק) – 1/2 כוס ללא תוספת סוכר","שורש זנגביל – 2 גדולים או 4 יח' קטנות","שזיף יבש – 2 יחידות","שזיפים – 2 בינוניים","שסק – 4 יחידות","שקית תפוחונים (עד פעמיים בשבוע)","תאנה טריה – 2 יחידות","תאנה יבשה – 1 יחידה","תות עץ – 1 כוס","תות שדה מיובש – 20 גרם","תות שדה – 1 כוס","תמר יבש – 2 יח' קטנות","תמר יבש (מג'הול) – 1 יחידה","תמר לח – 2 יחידות","תפוז סיני – 6 יחידות","תפוז – 1 בינוני","תפוח עץ מיובש – 3 טבעות","תפוח עץ – 1 בינוני"]}]},
+meat:{name:"חלבון בשרי",ico:"ב",note:"מנת הבשר או הדג היחידה ביום. קבוצת התחליפים: עד פעמיים בשבוע.",groups:[
+ {g:"בשר ועוף",n:"150 גרם לפני בישול (100 גרם אחרי)",items:["חזה עוף","בקר ללא שומן (עגל או פילה)","1/4 עוף בגריל או עוף מבושל (ללא עור)","3 שוקי עוף (פולקע)","שווארמה הודו 150 גרם","3 קציצות בקר","2 שיפודי עוף או פרגית","3 כדורי בשר עוף או הודו או בשר רזה"]},
+ {g:"דגים",n:"200 גרם לפני בישול (150 גרם אפוי או מבושל)",items:["דג: מקרל, ורדון, זהבון, טונה, סול, הרינג (ללא שמן), סלמון, הליבוט, בקלה","1.5 קופסאות טונה במים (200 גרם)","1 קופסת טונה בשמן מסוננת היטב","1 קופסת סרדינים מסוננים מהשמן"]},
+ {g:"קטניות",items:["6 כדורי פלאפל אפויים בבית","10 כדורי פלאפל חלי ממן אפויים","1.5 כוסות קטניות מבושלות (אפונה יבשה, עדשים, שעועית יבשה, חומוס, פול, פולי סויה, קינואה)","3 כפות שטוחות של חומוס (ביתי/מסעדה)","150 גרם טופו","60 גרם שבבי סויה יבשים (לפני בישול)","3 כוסות גדושות של מרק קטניות"]},
+ {g:"תחליפי חלבון",n:"עד פעמיים בשבוע",w:true,items:["200 גרם פסטרמה לייט (כ-100 קלוריות ל-100 גרם) – 9 פרוסות","2 כנפיים","שיפוד לבבות, כ-6 יחידות (מוגבל לפעם בשבוע)","1 המבורגר עשוי בטוסטר אובן או בתנור (מוגבל לפעם בשבוע)","3 נקניקיות רגילות (מוגבל לפעם בשבוע)","2 יח' מוצרים מוכנים עד 5%","2 שניצל תרד/ברוקולי טבעול (99 קלוריות)","2 חזה בגריל מן הצומח טבעול (90 קלוריות)","2 המבורגר מן הצומח/קבב מתובל מן הצומח טבעול (99 קלוריות)","2 שניצל תירס לייט","3 יחידות כבד עוף (מוגבל לפעם בשבוע)","200 גרם קורקבנים, כ-10 יחידות (מוגבל לפעם בשבוע)","150 גרם סלמון מעושן"]}]},
+half:{name:"חצי מנת חלבון",ico:"½",note:"בארוחת הערב בלבד, בנוסף למנת חלבון הגבינה המלאה.",groups:[
+ {g:"חצי מנה",items:["פרוסת גבינה צהובה 5%","כף גבינה 5% או 3% מכל סוג","חצי פרוסת גבינה צהובה 9%","משולש מון בלאן","30 גרם גבינה בולגרית/צפתית","כפית חומוס","כף ממרח טופו עד 5% שומן","חצי כוס גלידה דיאט 40 קלוריות","חצי כוס חלב 1%","חצי כוס סויה 1.5% טבעי בלבד","חצי משקה בוקר 0%","חצי כוס שוקו 0%","1/4 קופסת טונה במים","50 גרם סרדינים מסוננים היטב","40 גרם דג מבושל","1/4 כוס פולי סויה","30 גרם טופו","חצי ביצה","2 פרוסות פסטרמה","1.5 פלאפל אפוי"]}]}
+};
+const MEALS=[
+ {id:"m1",name:"ארוחת בוקר",when:"פתיחת היום",parts:["carb","cheese","fat"]},
+ {id:"m2",name:"ארוחת ביניים",when:"ביניים בוקר",parts:["carb","cheese","fat","fruit"]},
+ {id:"m3",name:"ארוחת צהריים",when:"הארוחה הגדולה",parts:["carb","fat","meat"]},
+ {id:"m4",name:"ארוחת ביניים",when:"ביניים אחר הצהריים",parts:["carb","fat","fruit"]},
+ {id:"m5",name:"ארוחת ערב",when:"גבינה מלאה + חצי מנה",parts:["carb","cheese","fat","half"]},
+ {id:"m6",name:"ארוחת לילה",when:"סגירת היום",parts:["cheese","fruit"]}
+];
+const TOTAL=MEALS.reduce((s,m)=>s+m.parts.length,0);
+const KEY="menu1500-picks";
+let picks={};
+try{picks=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){picks={}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(picks))}catch(e){}}
+
+const LIMIT=/\((עד פעמיים בשבוע|מוגבל לפעם בשבוע|פעם ביום|עד פעם ביום|רצוי לא כל יום)\)/;
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+const $=id=>document.getElementById(id);
+function render(){
+  const wrap=$("meals");wrap.innerHTML="";
+  let done=0;
+  MEALS.forEach((m,i)=>{
+    const filled=m.parts.filter(p=>picks[m.id+":"+p]).length;done+=filled;
+    const sec=document.createElement("section");
+    sec.className="meal"+(filled===m.parts.length?" done":"");
+    sec.innerHTML=`<div class="meal-h"><div class="meal-t"><span class="num" aria-hidden="true">${i+1}</span><div><h2>${m.name}</h2><span class="when">${m.when}</span></div></div><span class="badge">${filled}/${m.parts.length}</span></div><div class="parts"></div>`;
+    const parts=sec.querySelector(".parts");
+    m.parts.forEach(p=>{
+      const L=LISTS[p],v=picks[m.id+":"+p];
+      const b=document.createElement("button");b.type="button";b.className="part"+(v?" filled":"");
+      b.innerHTML=`<span class="ico" aria-hidden="true">${L.ico}</span><span class="lbl"><span class="name">${L.name}</span><span class="val">${v?esc(v):"עדיין לא נבחר"}</span></span><span class="go">${v?"שינוי":"בחירה"}</span>`;
+      b.addEventListener("click",()=>openSheet(m,p));
+      parts.appendChild(b);
+    });
+    wrap.appendChild(sec);
+  });
+  wrap.style.display="flex";wrap.style.flexDirection="column";wrap.style.gap="18px";
+  $("score").textContent=done+"/"+TOTAL;
+  $("bar").style.width=(done/TOTAL*100)+"%";
+  $("status").textContent=done===0?"אין עדיין בחירות להיום":done===TOTAL?"כל המנות של היום נבחרו. כל הכבוד!":`נבחרו ${done} מתוך ${TOTAL} מנות היום`;
+}
+
+let cur=null;
+function openSheet(m,p){
+  cur={m,p};const L=LISTS[p];
+  $("sheetTitle").textContent=`${L.name} · ${m.name}`;
+  $("sheetNote").textContent=L.note;
+  $("q").value="";drawList();
+  $("scrim").hidden=false;$("sheet").hidden=false;document.body.style.overflow="hidden";
+  setTimeout(()=>$("list").scrollTop=0,0);
+}
+function closeSheet(){$("scrim").hidden=true;$("sheet").hidden=true;document.body.style.overflow="";cur=null}
+function drawList(){
+  const {m,p}=cur,L=LISTS[p],q=$("q").value.trim(),key=m.id+":"+p,sel=picks[key];
+  const list=$("list");list.innerHTML="";let n=0;
+  L.groups.forEach(g=>{
+    const items=g.items.filter(i=>!q||i.includes(q));if(!items.length)return;
+    const h=document.createElement("div");h.className="grp";h.innerHTML=esc(g.g)+(g.n?` <small>· ${esc(g.n)}</small>`:"");list.appendChild(h);
+    items.forEach(i=>{
+      n++;const m2=i.match(LIMIT);const label=m2?i.replace(LIMIT,"").replace(/\s+$/,""):i;
+      const tag=m2?m2[1]:(g.w?g.n:"");
+      const b=document.createElement("button");b.type="button";b.className="opt"+(sel===i?" sel":"");
+      b.innerHTML=`<span>${esc(label)}</span>${tag?`<em class="tag">${esc(tag)}</em>`:""}`;
+      b.addEventListener("click",()=>{picks[key]=i;save();render();closeSheet();toast("נבחר: "+label)});
+      list.appendChild(b);
+    });
+  });
+  if(!n){const e=document.createElement("div");e.className="empty";e.textContent="לא נמצאה מנה בשם הזה. נסה מילה אחרת.";list.appendChild(e)}
+  if(sel){const c=document.createElement("button");c.type="button";c.className="clear";c.textContent="ניקוי הבחירה";
+    c.addEventListener("click",()=>{delete picks[key];save();render();closeSheet()});list.appendChild(c)}
+}
+let tt;function toast(t){const el=$("toast");el.textContent=t;el.hidden=false;clearTimeout(tt);tt=setTimeout(()=>el.hidden=true,1800)}
+
+$("q").addEventListener("input",drawList);
+$("close").addEventListener("click",closeSheet);
+$("scrim").addEventListener("click",closeSheet);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&cur)closeSheet()});
+$("reset").addEventListener("click",()=>{$("confirm").hidden=false;$("actions").hidden=true});
+$("no").addEventListener("click",()=>{$("confirm").hidden=true;$("actions").hidden=false});
+$("yes").addEventListener("click",()=>{picks={};save();render();$("confirm").hidden=true;$("actions").hidden=false;toast("התחלנו יום חדש")});
+$("copy").addEventListener("click",()=>{
+  const txt=MEALS.map((m,i)=>(i+1)+". "+m.name+"\n"+m.parts.map(p=>"- "+LISTS[p].name+": "+(picks[m.id+":"+p]||"לא נבחר")).join("\n")).join("\n\n");
+  const fallback=()=>{const ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");toast("התפריט הועתק")}catch(e){toast("סמן והעתק ידנית")}ta.remove()};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(()=>toast("התפריט הועתק"),fallback)}else fallback();
+});
+render();
+</script>
+
+</body></html>
