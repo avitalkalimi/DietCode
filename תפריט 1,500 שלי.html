@@ -5,7 +5,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&family=Press+Start+2P&display=swap">
 <style>
-/* Layout: one-column game "level" — sticky score bar, six meal blocks stacked like platforms, bottom-sheet picker. Single deliberate sky-world look. */
+/* Layout: one-column game "level" — sticky score bar, four meal blocks stacked like platforms, bottom-sheet picker. Single deliberate sky-world look. */
 :root{
   --sky:#6FA8FF; --sky-deep:#4A86E8; --cloud:#FFFFFF; --brick:#C84C0C; --brick-dark:#7A2E08;
   --gold:#FBD000; --gold-dark:#B88A00; --grass:#3FA34D; --ink:#2A1606; --paper:#FFF8E7; --muted:#7B6A55;
@@ -43,6 +43,9 @@ main{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:18px;p
 .meal-h .when{font-size:.78rem;color:var(--ink);opacity:.75;display:block;font-weight:500}
 .meal-t{display:flex;align-items:center;gap:10px}
 .num{flex:none;width:32px;height:32px;display:grid;place-items:center;background:var(--brick);color:#fff;border:3px solid var(--ink);border-radius:6px;font-family:var(--pixel);font-size:.75rem;text-shadow:1px 1px 0 var(--brick-dark);box-shadow:inset -3px -3px 0 var(--brick-dark)}
+.meal-end{display:flex;align-items:center;gap:6px;flex:none}
+.time{display:flex;align-items:center;gap:6px;background:var(--sky-deep);color:#fff;border:2px solid var(--ink);border-radius:5px;padding:4px 8px 4px 6px;font-family:var(--pixel);font-size:.65rem;direction:ltr;font-variant-numeric:tabular-nums;text-shadow:1px 1px 0 var(--ink);box-shadow:inset 0 -3px 0 rgba(42,22,6,.3)}
+.time::before{content:"";width:12px;height:12px;flex:none;border-radius:50%;background:#fff;border:2px solid var(--ink);background-image:linear-gradient(var(--ink),var(--ink)),linear-gradient(var(--ink),var(--ink));background-repeat:no-repeat;background-size:2px 4px,4px 2px;background-position:4px 1px,4px 4px}
 .badge{font-family:var(--pixel);font-size:.6rem;background:var(--ink);color:#fff;border-radius:5px;padding:6px 8px;direction:ltr;white-space:nowrap}
 .meal.done .badge{background:var(--grass)}
 .parts{display:flex;flex-direction:column}
@@ -94,7 +97,7 @@ footer a{color:#0B2A66;font-weight:700}
 
 <header class="top"><div class="top-in">
   <h1>התפריט שלי</h1>
-  <div class="score" aria-live="polite"><span class="coin" aria-hidden="true"></span><span id="score">0/19</span></div>
+  <div class="score" aria-live="polite"><span class="coin" aria-hidden="true"></span><span id="score">0/18</span></div>
 </div></header>
 
 <main>
@@ -147,9 +150,9 @@ fat:{name:"שומן",ico:"ש",note:"עד 60 קלוריות למנה.",groups:[
  {g:"פיצוחים",n:"רצוי לא קלויים",items:["7 שקדים","3 פקאנים/אגוזי מלך","10 בוטנים","1 כף גרעיני חמניה","10 יחידות פיסטוק","4 יחידות קשיו","3 יחידות מקדמיה","5 יחידות אגוזי לוז","2 יחידות אגוזי ברזיל","7 יחידות בננה צ'יפס (עד פעמיים בשבוע)"]},
  {g:"רטבים",items:["3 כפות רוטב לייט","1.5 כף רוטב רגיל"]},
  {g:"ממרחים",items:["1 כף סלט חצילים במיונז/בטחינה","1 כפית ממרח בוטנים","1 כפית טחינה גולמית","1 כף טחינה מוכנה","1 כפית מיונז","1 כף \"כמו מיונז\"","1 כף ממרח שומשום (עד פעמיים בשבוע)","1 כף אבוקדו","1 כפית חומוס מוכן","1 כפית הריסה/פסטו/עגבניות מיובשות/ממרח זיתים","1 כף שטוחה איקרה","10 גרם חלווה (עד פעמיים בשבוע)"]}]},
-fruit:{name:"פרי",ico:"פר",note:"3 מנות פרי ביום: בשתי ארוחות הביניים ובארוחת הלילה.",groups:[
+fruit:{name:"פרי",ico:"פר",note:"3 מנות פרי ביום: בארוחת הצהריים, בארוחת הביניים ובארוחת הערב.",groups:[
  {g:"פירות",items:["אבטיח – 1 כוס","אגס – 1 בינוני","אוכמניות – 1 כוס","אנונה – 1 קטנה","אננס טבעי – 2 פרוסות","אננס יבש – 2 יח'","אננס מיובש מסוכר – 1/2 יח'","אננס מקופסת שימורים – 1 יח'","אפרסמון – 1 קטן","אפרסק – 1 בינוני","אשכולית – 1/2 קטנה","בננה – 1 קטנה","גוג'י ברי – 2 כפות","גויאבה – 1 בינונית","דובדבנים – 1 כוס","חבוש – 1 קטן","חמוציות – 2 כפות ללא תוספת סוכר","חרוב – 2 יחידות","ליפתן משומר – 1/3 כוס בלי מיץ","ליצ'י טרי – 7 יח'","ליצ'י משומר – 4 יח'","מיץ פרי הדר טבעי – 1/2 כוס","מלון – 1 כוס","מנגו – 1/2 יחידה","משמש מיובש – 3 יחידות","משמש – 3 קטנים","נקטרינה – 1 יחידה בינונית","סברס – 2 יחידות","ענבים – 1 כוס","פאפיה טריה – 1 כוס","פאפיה יבשה – 1/4","פומלה – 1/3","פטל – 1 כוס","פיג'ויה – 2 יחידות","פיטאיה – 1/2 יח' בינונית","פיטנגו – 1 כוס","פירות יער – 1 כוס","פסיפלורה – 4 יחידות","צימוקים – 1 כף","קיווי – 2 בינוניים","קלמנטינה – 2 בינוניות","קרמבולה – 2 יח'","רימון – 1/2 יחידה","רסק תפוחים (לא ממותק) – 1/2 כוס ללא תוספת סוכר","שורש זנגביל – 2 גדולים או 4 יח' קטנות","שזיף יבש – 2 יחידות","שזיפים – 2 בינוניים","שסק – 4 יחידות","שקית תפוחונים (עד פעמיים בשבוע)","תאנה טריה – 2 יחידות","תאנה יבשה – 1 יחידה","תות עץ – 1 כוס","תות שדה מיובש – 20 גרם","תות שדה – 1 כוס","תמר יבש – 2 יח' קטנות","תמר יבש (מג'הול) – 1 יחידה","תמר לח – 2 יחידות","תפוז סיני – 6 יחידות","תפוז – 1 בינוני","תפוח עץ מיובש – 3 טבעות","תפוח עץ – 1 בינוני"]}]},
-meat:{name:"חלבון בשרי",ico:"ב",note:"מנת הבשר או הדג היחידה ביום. קבוצת התחליפים: עד פעמיים בשבוע.",groups:[
+meat:{name:"חלבון בשרי",ico:"ב",note:"2 מנות בשר או דג ביום, שתיהן בארוחת הצהריים. קבוצת התחליפים: עד פעמיים בשבוע.",groups:[
  {g:"בשר ועוף",n:"150 גרם לפני בישול (100 גרם אחרי)",items:["חזה עוף","בקר ללא שומן (עגל או פילה)","1/4 עוף בגריל או עוף מבושל (ללא עור)","3 שוקי עוף (פולקע)","שווארמה הודו 150 גרם","3 קציצות בקר","2 שיפודי עוף או פרגית","3 כדורי בשר עוף או הודו או בשר רזה"]},
  {g:"דגים",n:"200 גרם לפני בישול (150 גרם אפוי או מבושל)",items:["דג: מקרל, ורדון, זהבון, טונה, סול, הרינג (ללא שמן), סלמון, הליבוט, בקלה","1.5 קופסאות טונה במים (200 גרם)","1 קופסת טונה בשמן מסוננת היטב","1 קופסת סרדינים מסוננים מהשמן"]},
  {g:"קטניות",items:["6 כדורי פלאפל אפויים בבית","10 כדורי פלאפל חלי ממן אפויים","1.5 כוסות קטניות מבושלות (אפונה יבשה, עדשים, שעועית יבשה, חומוס, פול, פולי סויה, קינואה)","3 כפות שטוחות של חומוס (ביתי/מסעדה)","150 גרם טופו","60 גרם שבבי סויה יבשים (לפני בישול)","3 כוסות גדושות של מרק קטניות"]},
@@ -157,13 +160,15 @@ meat:{name:"חלבון בשרי",ico:"ב",note:"מנת הבשר או הדג הי
 half:{name:"חצי מנת חלבון",ico:"½",note:"בארוחת הערב בלבד, בנוסף למנת חלבון הגבינה המלאה.",groups:[
  {g:"חצי מנה",items:["פרוסת גבינה צהובה 5%","כף גבינה 5% או 3% מכל סוג","חצי פרוסת גבינה צהובה 9%","משולש מון בלאן","30 גרם גבינה בולגרית/צפתית","כפית חומוס","כף ממרח טופו עד 5% שומן","חצי כוס גלידה דיאט 40 קלוריות","חצי כוס חלב 1%","חצי כוס סויה 1.5% טבעי בלבד","חצי משקה בוקר 0%","חצי כוס שוקו 0%","1/4 קופסת טונה במים","50 גרם סרדינים מסוננים היטב","40 גרם דג מבושל","1/4 כוס פולי סויה","30 גרם טופו","חצי ביצה","2 פרוסות פסטרמה","1.5 פלאפל אפוי"]}]}
 };
+LISTS.cheese2={...LISTS.cheese,name:"חלבון גבינה נוסף"};
+LISTS.carb2={...LISTS.carb,name:"פחמימה נוספת"};
+LISTS.fat2={...LISTS.fat,name:"שומן נוסף"};
+LISTS.meat2={...LISTS.meat,name:"חלבון בשרי נוסף"};
 const MEALS=[
- {id:"m1",name:"ארוחת בוקר",when:"פתיחת היום",parts:["carb","cheese","fat"]},
- {id:"m2",name:"ארוחת ביניים",when:"ביניים בוקר",parts:["carb","cheese","fat","fruit"]},
- {id:"m3",name:"ארוחת צהריים",when:"הארוחה הגדולה",parts:["carb","fat","meat"]},
- {id:"m4",name:"ארוחת ביניים",when:"ביניים אחר הצהריים",parts:["carb","fat","fruit"]},
- {id:"m5",name:"ארוחת ערב",when:"גבינה מלאה + חצי מנה",parts:["carb","cheese","fat","half"]},
- {id:"m6",name:"ארוחת לילה",when:"סגירת היום",parts:["cheese","fruit"]}
+ {id:"m1",name:"ארוחת בוקר",time:"08:00",when:"פתיחת היום",parts:["carb","cheese","fat"]},
+ {id:"m3",name:"ארוחת צהריים",time:"13:00",when:"הארוחה הגדולה – 2 פחמימות + 2 מנות בשר + 2 שומן + פרי",parts:["carb","carb2","meat","meat2","fat","fat2","fruit"]},
+ {id:"m4",name:"ארוחת ביניים",time:"16:30",when:"ביניים אחר הצהריים",parts:["carb","fat","fruit"]},
+ {id:"m5",name:"ארוחת ערב",time:"20:00",when:"סגירת היום – 2 מנות גבינה + פרי",parts:["carb","cheese","cheese2","fat","fruit"]}
 ];
 const TOTAL=MEALS.reduce((s,m)=>s+m.parts.length,0);
 const KEY="menu1500-picks";
@@ -182,7 +187,7 @@ function render(){
     const filled=m.parts.filter(p=>picks[m.id+":"+p]).length;done+=filled;
     const sec=document.createElement("section");
     sec.className="meal"+(filled===m.parts.length?" done":"");
-    sec.innerHTML=`<div class="meal-h"><div class="meal-t"><span class="num" aria-hidden="true">${i+1}</span><div><h2>${m.name}</h2><span class="when">${m.when}</span></div></div><span class="badge">${filled}/${m.parts.length}</span></div><div class="parts"></div>`;
+    sec.innerHTML=`<div class="meal-h"><div class="meal-t"><span class="num" aria-hidden="true">${i+1}</span><div><h2>${m.name}</h2><span class="when">${m.when}</span></div></div><div class="meal-end"><span class="time" aria-label="שעה ${m.time}">${m.time}</span><span class="badge">${filled}/${m.parts.length}</span></div></div><div class="parts"></div>`;
     const parts=sec.querySelector(".parts");
     m.parts.forEach(p=>{
       const L=LISTS[p],v=picks[m.id+":"+p];
@@ -238,7 +243,7 @@ $("reset").addEventListener("click",()=>{$("confirm").hidden=false;$("actions").
 $("no").addEventListener("click",()=>{$("confirm").hidden=true;$("actions").hidden=false});
 $("yes").addEventListener("click",()=>{picks={};save();render();$("confirm").hidden=true;$("actions").hidden=false;toast("התחלנו יום חדש")});
 $("copy").addEventListener("click",()=>{
-  const txt=MEALS.map((m,i)=>(i+1)+". "+m.name+"\n"+m.parts.map(p=>"- "+LISTS[p].name+": "+(picks[m.id+":"+p]||"לא נבחר")).join("\n")).join("\n\n");
+  const txt=MEALS.map((m,i)=>(i+1)+". "+m.name+" ("+m.time+")\n"+m.parts.map(p=>"- "+LISTS[p].name+": "+(picks[m.id+":"+p]||"לא נבחר")).join("\n")).join("\n\n");
   const fallback=()=>{const ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");toast("התפריט הועתק")}catch(e){toast("סמן והעתק ידנית")}ta.remove()};
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(()=>toast("התפריט הועתק"),fallback)}else fallback();
 });
